@@ -1,10 +1,19 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
+import Link from "next/link";
+import invariant from "tiny-invariant";
+import { PostProps } from ".";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps,
+}: AppProps<{ posts: PostProps[] }>) {
+  invariant(pageProps.posts, "Please make sure to get posts on all pages");
+  const { posts } = pageProps;
+
   return (
     <div
       className={`${inter.className} grid h-screen`}
@@ -15,10 +24,15 @@ export default function App({ Component, pageProps }: AppProps) {
       <nav className="p-9 overflow-auto">
         <h1 className="pb-9">Artist name</h1>
         <ul>
-          <li>hello</li>
-          <li>
-            <button>test</button>
-          </li>
+          {posts &&
+            posts.map(({ slug, title }) => {
+              invariant(slug, "Posts must have a slug");
+              return (
+                <li key={slug}>
+                  <Link href={slug}>{title}</Link>
+                </li>
+              );
+            })}
         </ul>
       </nav>
       <Component {...pageProps} />

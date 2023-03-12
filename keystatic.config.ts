@@ -41,6 +41,11 @@ export default config({
         title: fields.slug({
           name: {
             label: "Title",
+            validation: {
+              length: {
+                min: 1,
+              },
+            },
           },
         }),
         summary: fields.text({
