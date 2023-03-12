@@ -14,7 +14,7 @@ export default function App({
   Component,
   pageProps,
 }: AppProps<{ posts: PostProps[] }>) {
-  invariant(pageProps.posts, "Please make sure to get posts on all pages");
+  // invariant(pageProps.posts, "Please make sure to get posts on all pages");
   const { posts } = pageProps;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -72,8 +72,6 @@ export default function App({
       document.body.className = "";
     }
   }, [isOpen]);
-
-  console.log(router);
 
   return (
     <div
