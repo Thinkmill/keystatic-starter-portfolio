@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { createReader } from "@keystatic/core/reader";
-import { DocumentRenderer } from "@keystone-6/document-renderer";
 import config from "../keystatic.config";
+import { DocumentRenderer } from "@keystone-6/document-renderer";
 import { inject } from "@/utils/slugHelpers";
-import { InferGetStaticPropsType } from "next";
+import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
+import invariant from "tiny-invariant";
 
 const reader = createReader("", config);
 
@@ -12,8 +13,12 @@ export type PostProps = InferGetStaticPropsType<
 >["posts"][number];
 
 export default function Home({
-  home,
+  posts,
+  slug,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const post = posts.find((el) => el.slug === slug);
+  invariant(post, "Unable to match slug to post in array");
+
   return (
     <>
       <Head>
@@ -22,19 +27,33 @@ export default function Home({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {home.content && <DocumentRenderer document={home.content} />}
+      {post.content && <DocumentRenderer document={post.content} />}
     </>
   );
 }
 
-export async function getStaticProps() {
-  const [postSlugs, index] = await Promise.all([
+export async function getStaticPaths(params: GetStaticPropsContext) {
+  const postSlugs = await reader.collections.posts.list();
+  const posts = await Promise.all(
+    postSlugs.map(async (slug) => {
+      const post = await inject(slug, reader.collections.posts);
+      return { ...post };
+    })
+  );
+  const paths = posts.map(({ slug }) => ({ params: { slug } }));
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const [postSlugs] = await Promise.all([
     await reader.collections.posts.list(),
-    await reader.singletons.index.read(),
   ]);
 
-  const [home, ...posts] = await Promise.all([
-    { ...index, content: await index?.content() },
+  const [...posts] = await Promise.all([
     ...postSlugs.map(async (slug) => {
       const post = await inject(slug, reader.collections.posts);
       const content = (await post?.content()) || [];
@@ -44,7 +63,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      home,
+      slug: context.params?.slug,
       posts: posts || {},
     },
   };

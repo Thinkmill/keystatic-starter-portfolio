@@ -21,8 +21,10 @@ export default function App({
         gridTemplate: "'a b' 100vh / 18rem 1fr",
       }}
     >
-      <nav className="p-9 overflow-auto">
-        <h1 className="pb-9">Artist name</h1>
+      <nav className="p-9 overflow-auto break-words">
+        <h1 className="pb-9">
+          <Link href="/">Artist name</Link>
+        </h1>
         <ul>
           {posts &&
             posts.map(({ slug, title }) => {
@@ -35,7 +37,11 @@ export default function App({
             })}
         </ul>
       </nav>
-      <Component {...pageProps} />
+      <main className="overflow-auto p-9 pb-20 w-full">
+        <div className="prose">
+          <Component {...pageProps} />
+        </div>
+      </main>
     </div>
   );
 }
