@@ -53,6 +53,12 @@ export default config({
           validation: { length: { min: 4 } },
         }),
         publishedDate: fields.date({ label: "Published Date" }),
+        images: fields.array({
+          ...fields.object({
+            image: fields.image({ label: "Image" }),
+            alt: fields.text({ label: "Alt text" }),
+          }),
+        }),
         content: fields.document({
           label: "Content",
           formatting: true,
