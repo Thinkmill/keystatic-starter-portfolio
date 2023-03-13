@@ -91,11 +91,11 @@ const Nav: React.FC<{ children: ReactNode }> = ({ children }) => {
             </button>
           </div>
           <nav
-            className={`p-9 pt-4 break-words bg-white md:block ${
+            className={`p-6 md:p-9 pt-4 md:pt-4 break-words bg-white md:block ${
               !isOpen ? "hidden" : ""
             }`}
           >
-            <ul>{children}</ul>
+            <ul className="leading-8 md:leading-[1.5]">{children}</ul>
           </nav>
         </div>
       </FocusLock>

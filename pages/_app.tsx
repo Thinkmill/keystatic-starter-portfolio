@@ -27,7 +27,7 @@ export default function App({
             invariant(slug, "Posts must have a slug");
             return (
               <li key={slug}>
-                <Link href={slug} className="md:hover:opacity-75">
+                <Link href={slug} className="block md:hover:opacity-75">
                   {title}
                 </Link>
               </li>
