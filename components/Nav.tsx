@@ -78,11 +78,11 @@ const Nav: React.FC<{ children: ReactNode }> = ({ children }) => {
           ref={dialogRef}
         >
           <div className="p-4 md:pb-0 break-words bg-white flex justify-between md:static">
-            <h3 className="p-5">
+            <h3 className="p-2 md:p-5">
               <Link href="/">Artist name</Link>
             </h3>
             <button
-              className="p-5 md:hidden"
+              className="p-2 md:p-5 md:hidden"
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
               aria-controls="navigation"
