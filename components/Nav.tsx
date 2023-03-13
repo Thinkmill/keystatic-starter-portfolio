@@ -87,7 +87,7 @@ const Nav: React.FC<{ children: ReactNode }> = ({ children }) => {
               aria-expanded={isOpen}
               aria-controls="navigation"
             >
-              toggle
+              Menu
             </button>
           </div>
           <nav
