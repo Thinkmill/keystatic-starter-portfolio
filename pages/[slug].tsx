@@ -33,7 +33,11 @@ export default function Home({
           (el) =>
             el.image && (
               <li>
-                <img src={`/${post.slug}/${el.image}`} key={el.image} />
+                <img
+                  src={`/${post.slug}/${el.image}`}
+                  alt={el.alt}
+                  key={el.image}
+                />
               </li>
             )
         )}
