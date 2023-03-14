@@ -55,7 +55,7 @@ export default config({
         publishedDate: fields.date({ label: "Published Date" }),
         images: fields.array({
           ...fields.object({
-            image: fields.image({ label: "Image" }),
+            image: fields.image({ label: "Image", directory: "public" }),
             alt: fields.text({ label: "Alt text" }),
           }),
         }),

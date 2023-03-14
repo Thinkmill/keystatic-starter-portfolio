@@ -18,6 +18,7 @@ export default function Home({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const post = posts.find((el) => el.slug === slug);
   invariant(post, "Unable to match slug to post in array");
+  console.log(post);
 
   return (
     <>
@@ -27,7 +28,19 @@ export default function Home({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {post.content && <DocumentRenderer document={post.content} />}
+      <ul className="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 mb-16">
+        {post.images?.map(
+          (el) =>
+            el.image && (
+              <li>
+                <img src={`/${post.slug}/${el.image}`} key={el.image} />
+              </li>
+            )
+        )}
+      </ul>
+      <div className="prose">
+        {post.content && <DocumentRenderer document={post.content} />}
+      </div>
     </>
   );
 }

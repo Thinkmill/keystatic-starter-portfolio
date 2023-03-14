@@ -35,9 +35,7 @@ export default function App({
           })}
       </Nav>
       <main className="overflow-auto px-6 md:px-9 py-32 md:pt-9 md:pb-20 w-full">
-        <div className="prose">
-          <Component {...pageProps} />
-        </div>
+        <Component {...pageProps} />
       </main>
     </div>
   );

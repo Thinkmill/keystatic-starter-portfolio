@@ -79,7 +79,7 @@ const Nav: React.FC<{ children: ReactNode }> = ({ children }) => {
         >
           <div className="p-4 md:pb-0 break-words bg-white flex justify-between md:static">
             <h3 className="p-2 md:p-5">
-              <Link href="/">Artist name</Link>
+              <Link href="/">DALL-E</Link>
             </h3>
             <button
               className="p-2 md:p-5 md:hidden"
