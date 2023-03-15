@@ -8,11 +8,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@keystatic/core": "^0.0.66",
     "@keystatic/next": "^0.0.4",
     "@types/node": "18.15.0",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
-    "keystatic": "^0.0.36",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
