@@ -1,8 +1,7 @@
 import Head from "next/head";
 import { createReader } from "@keystatic/core/reader";
 import config from "../keystatic.config";
-import { DocumentRenderer } from "@keystone-6/document-renderer";
-import { inject } from "@/utils/slugHelpers";
+import { DocumentRenderer } from "@keystatic/core/renderer";
 import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import invariant from "tiny-invariant";
 
@@ -32,12 +31,8 @@ export default function Home({
         {post.images?.map(
           (el) =>
             el.image && (
-              <li>
-                <img
-                  src={`/${post.slug}/${el.image}`}
-                  alt={el.alt}
-                  key={el.image}
-                />
+              <li key={el.image}>
+                <img src={`/${post.slug}/${el.image}`} alt={el.alt} />
               </li>
             )
         )}
@@ -50,17 +45,11 @@ export default function Home({
 }
 
 export async function getStaticPaths(params: GetStaticPropsContext) {
-  const postSlugs = await reader.collections.posts.list();
-  const posts = await Promise.all(
-    postSlugs.map(async (slug) => {
-      const post = await inject(slug, reader.collections.posts);
-      return { ...post };
-    })
-  );
-  const paths = posts.map(({ slug }) => ({ params: { slug } }));
+  const posts = await reader.collections.posts.list();
+  const paths = posts.map((slug) => ({ params: { slug } }));
 
   return {
-    paths,
+    paths: paths || [],
     fallback: false,
   };
 }
@@ -72,16 +61,17 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   const [...posts] = await Promise.all([
     ...postSlugs.map(async (slug) => {
-      const post = await inject(slug, reader.collections.posts);
-      const content = (await post?.content()) || [];
-      return { ...post, content };
+      const post = await reader.collections.posts.readOrThrow(slug, {
+        resolveLinkedFiles: true,
+      });
+      return { ...post, slug };
     }),
   ]);
 
   return {
     props: {
       slug: context.params?.slug,
-      posts: posts || {},
+      posts: posts || [],
     },
   };
 }

@@ -1,6 +1,5 @@
 import { createReader } from "@keystatic/core/reader";
 import config from "../keystatic.config";
-import { inject } from "@/utils/slugHelpers";
 
 const reader = createReader("", config);
 
@@ -20,15 +19,16 @@ export async function getStaticProps() {
 
   const [...posts] = await Promise.all([
     ...postSlugs.map(async (slug) => {
-      const post = await inject(slug, reader.collections.posts);
-      const content = (await post?.content()) || [];
-      return { ...post, content };
+      const post = await reader.collections.posts.readOrThrow(slug, {
+        resolveLinkedFiles: true,
+      });
+      return { ...post, slug };
     }),
   ]);
 
   return {
     props: {
-      posts: posts || {},
+      posts: posts || [],
     },
   };
 }

@@ -1,8 +1,7 @@
 import Head from "next/head";
 import { createReader } from "@keystatic/core/reader";
-import { DocumentRenderer } from "@keystone-6/document-renderer";
 import config from "../keystatic.config";
-import { inject } from "@/utils/slugHelpers";
+import { DocumentRenderer } from "@keystatic/core/renderer";
 import { InferGetStaticPropsType } from "next";
 
 const reader = createReader("", config);
@@ -38,16 +37,17 @@ export async function getStaticProps() {
   const [home, ...posts] = await Promise.all([
     { ...index, content: await index?.content() },
     ...postSlugs.map(async (slug) => {
-      const post = await inject(slug, reader.collections.posts);
-      const content = (await post?.content()) || [];
-      return { ...post, content };
+      const post = await reader.collections.posts.readOrThrow(slug, {
+        resolveLinkedFiles: true,
+      });
+      return { ...post, slug };
     }),
   ]);
 
   return {
     props: {
       home,
-      posts: posts || {},
+      posts: posts || [],
     },
   };
 }
