@@ -16,6 +16,7 @@ export default function App({
   // invariant(pageProps.posts, "Please make sure to get posts on all pages");
   const { asPath } = useRouter();
   const { posts } = pageProps;
+  console.log(process.env.NODE_ENV)
   return (
     <div
       className={`${inter.className} grid md:h-screen grid-template text-neutral-900`}
