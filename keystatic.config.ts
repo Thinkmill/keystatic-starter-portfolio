@@ -6,6 +6,7 @@ import {
   LocalConfig,
   singleton,
 } from "@keystatic/core";
+import { field } from "./custom-field";
 
 const storage: LocalConfig["storage"] | GitHubConfig["storage"] =
   process.env.NODE_ENV === "development"
@@ -25,6 +26,9 @@ export default config({
       label: "Home",
       path: "content/pages/home/",
       schema: {
+        color: field({
+          label: "Color"
+        }),
         content: fields.document({
           label: "Content",
           formatting: true,
